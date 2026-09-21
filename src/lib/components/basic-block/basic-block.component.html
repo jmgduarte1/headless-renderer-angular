@@ -1,0 +1,140 @@
+@switch (block().type) {
+  @case ('container') {
+    @if (data().layout === 'grid') {
+      <headless-grid [block]="block()" />
+    } @else if (block().element === 'section') {
+      <section [ngClass]="classes()" [ngStyle]="styles()" [attr.id]="data().attributes?.['id'] ?? null">
+        @for (child of block().children ?? []; track (child.id + '-' + $index)) {
+          <ng-container *ngComponentOutlet="childComponent(child); inputs: { block: child }" />
+        }
+      </section>
+    } @else if (block().element === 'ul') {
+      <ul [ngClass]="classes()" [ngStyle]="styles()" [attr.id]="data().attributes?.['id'] ?? null">
+        @for (child of block().children ?? []; track (child.id + '-' + $index)) {
+          <ng-container *ngComponentOutlet="childComponent(child); inputs: { block: child }" />
+        }
+      </ul>
+    } @else if (block().element === 'li') {
+      <li [ngClass]="classes()" [ngStyle]="styles()" [attr.id]="data().attributes?.['id'] ?? null">
+        @if (data().html ?? data().text) {
+          <span [innerHTML]="data().html ?? data().text ?? ''"></span>
+        }
+        @for (child of block().children ?? []; track (child.id + '-' + $index)) {
+          <ng-container *ngComponentOutlet="childComponent(child); inputs: { block: child }" />
+        }
+      </li>
+    } @else if (block().element === 'blockquote') {
+      <blockquote [ngClass]="classes()" [ngStyle]="styles()" [attr.id]="data().attributes?.['id'] ?? null">
+        @for (child of block().children ?? []; track (child.id + '-' + $index)) {
+          <ng-container *ngComponentOutlet="childComponent(child); inputs: { block: child }" />
+        }
+      </blockquote>
+    } @else if (block().element === 'div' && data().layout === 'html') {
+      <div [ngClass]="classes()" [ngStyle]="styles()">
+        @if (data().attributes?.['id']; as fragmentId) {
+          <a class="basic-block__fragment-anchor" [attr.id]="fragmentId" aria-hidden="true"></a>
+        }
+        <span [innerHTML]="data().html ?? ''"></span>
+      </div>
+    } @else {
+      <div [ngClass]="classes()" [ngStyle]="styles()" [attr.id]="data().attributes?.['id'] ?? null">
+        @if (data().layout === 'cover') {
+          @if (coverBackgroundChild(); as backgroundChild) {
+            <div class="basic-block__cover-background">
+              <ng-container *ngComponentOutlet="childComponent(backgroundChild); inputs: { block: backgroundChild }" />
+            </div>
+          }
+          <span class="basic-block__overlay" [ngStyle]="overlayStyles()" aria-hidden="true"></span>
+          <div class="basic-block__cover-content">
+            @for (child of coverContentChildren(); track (child.id + '-' + $index)) {
+              <ng-container *ngComponentOutlet="childComponent(child); inputs: { block: child }" />
+            }
+          </div>
+        } @else {
+          @for (child of block().children ?? []; track (child.id + '-' + $index)) {
+            <ng-container *ngComponentOutlet="childComponent(child); inputs: { block: child }" />
+          }
+        }
+      </div>
+    }
+  }
+
+  @case ('text') {
+    @switch (block().element) {
+      @case ('h1') {
+        <h1 [ngClass]="classes()" [ngStyle]="styles()" [attr.id]="data().attributes?.['id'] ?? null" [innerHTML]="data().html ?? data().text ?? ''"></h1>
+      }
+      @case ('h2') {
+        <h2 [ngClass]="classes()" [ngStyle]="styles()" [attr.id]="data().attributes?.['id'] ?? null" [innerHTML]="data().html ?? data().text ?? ''"></h2>
+      }
+      @case ('h3') {
+        <h3 [ngClass]="classes()" [ngStyle]="styles()" [attr.id]="data().attributes?.['id'] ?? null" [innerHTML]="data().html ?? data().text ?? ''"></h3>
+      }
+      @case ('h4') {
+        <h4 [ngClass]="classes()" [ngStyle]="styles()" [attr.id]="data().attributes?.['id'] ?? null" [innerHTML]="data().html ?? data().text ?? ''"></h4>
+      }
+      @case ('h5') {
+        <h5 [ngClass]="classes()" [ngStyle]="styles()" [attr.id]="data().attributes?.['id'] ?? null" [innerHTML]="data().html ?? data().text ?? ''"></h5>
+      }
+      @case ('h6') {
+        <h6 [ngClass]="classes()" [ngStyle]="styles()" [attr.id]="data().attributes?.['id'] ?? null" [innerHTML]="data().html ?? data().text ?? ''"></h6>
+      }
+      @default {
+        <p [ngClass]="classes()" [ngStyle]="styles()" [attr.id]="data().attributes?.['id'] ?? null" [innerHTML]="data().html ?? data().text ?? ''"></p>
+      }
+    }
+  }
+
+  @case ('image') {
+    <img
+      [ngClass]="classes()"
+      [ngStyle]="styles()"
+      [attr.id]="data().attributes?.['id'] ?? null"
+      [src]="data().src"
+      [attr.srcset]="data().srcSet ?? null"
+      [attr.loading]="data().loading ?? 'lazy'"
+      [attr.alt]="data().alt ?? ''"
+      [attr.width]="data().attributes?.['width'] ?? null"
+      [attr.height]="data().attributes?.['height'] ?? null"
+    />
+  }
+
+  @case ('link') {
+    @if (!data().href) {
+      <button [ngClass]="classes()" [ngStyle]="styles()" [attr.id]="data().attributes?.['id'] ?? null" type="button">
+        {{ data().text }}
+      </button>
+    } @else {
+      <a
+        [ngClass]="classes()"
+        [ngStyle]="styles()"
+        [attr.id]="data().attributes?.['id'] ?? null"
+        [href]="data().href"
+        [attr.target]="data().target ?? null"
+        [attr.rel]="data().rel ?? null"
+      >
+        {{ data().text }}
+      </a>
+    }
+  }
+
+  @case ('details') {
+    <details [ngClass]="classes()" [ngStyle]="styles()" [attr.id]="data().attributes?.['id'] ?? null" [attr.open]="data().open ? '' : null">
+      <summary class="basic-block__summary">{{ data().summary }}</summary>
+
+      @for (child of block().children ?? []; track (child.id + '-' + $index)) {
+        <ng-container *ngComponentOutlet="childComponent(child); inputs: { block: child }" />
+      }
+    </details>
+  }
+
+  @case ('spacer') {
+    <div [ngClass]="classes()" [ngStyle]="styles()" [attr.id]="data().attributes?.['id'] ?? null" aria-hidden="true"></div>
+  }
+
+  @case ('separator') {
+    <hr [ngClass]="classes()" [ngStyle]="styles()" [attr.id]="data().attributes?.['id'] ?? null" />
+  }
+}
+
+

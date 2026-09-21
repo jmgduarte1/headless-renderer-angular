@@ -1,0 +1,97 @@
+<section class="hero" [ngClass]="hostClasses()" [ngStyle]="hostStyles()">
+  @if (data().media?.placement === 'background'; as background) {
+    <img
+      class="hero__background"
+      [src]="data().media?.image?.src"
+      [attr.alt]="imageAlt()"
+      [attr.width]="data().media?.image?.width ?? null"
+      [attr.height]="data().media?.image?.height ?? null"
+    />
+  }
+
+  @if (data().media && data().media?.placement === 'start') {
+    <figure class="hero__media" [ngStyle]="mediaStyles()">
+      <img
+        [src]="data().media?.image?.src"
+        [attr.alt]="imageAlt()"
+        [attr.width]="data().media?.image?.width ?? null"
+        [attr.height]="data().media?.image?.height ?? null"
+      />
+      <span class="hero__media-overlay" [ngStyle]="overlayStyles()" aria-hidden="true"></span>
+    </figure>
+  }
+
+  <div class="hero__content" [ngStyle]="contentStyles()">
+    @if (data().eyebrow) {
+      <p class="hero__eyebrow">{{ data().eyebrow }}</p>
+    }
+
+    <h1 class="hero__title">{{ data().title }}</h1>
+
+    @if (data().subtitle) {
+      <p class="hero__subtitle">{{ data().subtitle }}</p>
+    }
+
+    @if (data().actions?.length) {
+      <div class="hero__actions" aria-label="Hero actions">
+        @for (action of data().actions; track action.id) {
+          @if (action.link.type === 'internal') {
+            <a
+              matButton="filled"
+              [routerLink]="action.link.path"
+              [attr.aria-label]="action.accessibleLabel ?? null"
+              [class.hero__action-secondary]="action.variant === 'secondary'"
+              [class.hero__action-tertiary]="action.variant === 'tertiary'"
+            >
+              {{ action.label }}
+            </a>
+          } @else if (action.link.type === 'external') {
+            <a
+              matButton="filled"
+              [href]="action.link.url"
+              [attr.target]="action.link.target ?? null"
+              [attr.rel]="relFor(action)"
+              [attr.aria-label]="action.accessibleLabel ?? null"
+              [class.hero__action-secondary]="action.variant === 'secondary'"
+              [class.hero__action-tertiary]="action.variant === 'tertiary'"
+            >
+              {{ action.label }}
+            </a>
+          } @else if (action.link.type === 'anchor') {
+            <a
+              matButton="filled"
+              [href]="'#' + action.link.anchor"
+              [attr.aria-label]="action.accessibleLabel ?? null"
+              [class.hero__action-secondary]="action.variant === 'secondary'"
+              [class.hero__action-tertiary]="action.variant === 'tertiary'"
+            >
+              {{ action.label }}
+            </a>
+          } @else {
+            <a
+              matButton="filled"
+              [href]="action.link.type === 'email' ? 'mailto:' + action.link.address : 'tel:' + action.link.number"
+              [attr.aria-label]="action.accessibleLabel ?? null"
+            >
+              {{ action.label }}
+            </a>
+          }
+        }
+      </div>
+    }
+  </div>
+
+  @if (data().media && data().media?.placement === 'end') {
+    <figure class="hero__media" [ngStyle]="mediaStyles()">
+      <img
+        [src]="data().media?.image?.src"
+        [attr.alt]="imageAlt()"
+        [attr.width]="data().media?.image?.width ?? null"
+        [attr.height]="data().media?.image?.height ?? null"
+      />
+      <span class="hero__media-overlay" [ngStyle]="overlayStyles()" aria-hidden="true"></span>
+    </figure>
+  }
+</section>
+
+

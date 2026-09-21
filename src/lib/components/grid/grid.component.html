@@ -1,0 +1,22 @@
+<section #viewport [ngClass]="classes()" [ngStyle]="styles()" [style.--headless-slider-column-width.px]="sliderConfigValue()">
+  @if (sliderActive()) {
+    <div class="grid-wrapper swiper-wrapper" [ngStyle]="wrapperStyles()">
+      @for (child of block().children ?? []; track (child.id + '-' + $index)) {
+        <div class="grid-item swiper-slide">
+          <ng-container *ngComponentOutlet="childComponent(child); inputs: { block: child }" />
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="grid-wrapper" [ngStyle]="wrapperStyles()">
+      @for (child of block().children ?? []; track (child.id + '-' + $index)) {
+        <ng-container *ngComponentOutlet="childComponent(child); inputs: { block: child }" />
+      }
+    </div>
+  }
+  <button #previous class="grid-control grid-control--previous" type="button" aria-label="Previous items" [hidden]="!sliderActive()">‹</button>
+  <button #next class="grid-control grid-control--next" type="button" aria-label="Next items" [hidden]="!sliderActive()">›</button>
+  <div #pagination class="grid-pagination" [hidden]="!sliderActive()"></div>
+</section>
+
+

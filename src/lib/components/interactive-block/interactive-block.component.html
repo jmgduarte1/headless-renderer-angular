@@ -1,0 +1,114 @@
+@switch (block().type) {
+  @case ('accordion') {
+    <mat-accordion class="interactive-accordion" [multi]="data().allowMultiple ?? true">
+      @for (item of data().items ?? []; track item.id) {
+        <mat-expansion-panel [expanded]="item.expanded ?? false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{ item.title }}</mat-panel-title>
+          </mat-expansion-panel-header>
+          <section class="interactive-accordion__content" [attr.aria-label]="item.title">
+            @for (child of item.blocks; track child.id + '-' + $index) {
+              <ng-container *ngComponentOutlet="childComponent(child); inputs: { block: child }" />
+            }
+          </section>
+        </mat-expansion-panel>
+      }
+    </mat-accordion>
+  }
+  @case ('tabs') {
+    <section class="interactive-tabs" [ngClass]="classes()" [class.interactive-tabs--vertical]="data().orientation === 'vertical'" [ngStyle]="styles()">
+      @if (data().title) { <h2 class="interactive-tabs__title">{{ data().title }}</h2> }
+      @if (!isMobile() && data().orientation === 'vertical') {
+        <div class="interactive-tabs__layout">
+          <div class="interactive-tabs__list" role="tablist" [attr.aria-orientation]="data().orientation">
+            @for (tab of data().tabs ?? []; track tab.id; let index = $index) {
+              <button
+                class="interactive-tabs__tab"
+                type="button"
+                role="tab"
+                [id]="tabId(index)"
+                [attr.aria-selected]="activeTab() === index"
+                [attr.aria-controls]="panelId(index)"
+                [attr.tabindex]="activeTab() === index ? 0 : -1"
+                (click)="selectTab(index)"
+                (keydown)="onTabKeydown($event, index)"
+              >
+                @if (tab.icon) { <mat-icon aria-hidden="true">{{ tab.icon }}</mat-icon> }
+                <span>{{ tab.label }}</span>
+              </button>
+            }
+          </div>
+          <div class="interactive-tabs__panels">
+            @for (tab of data().tabs ?? []; track tab.id; let index = $index) {
+              @if (activeTab() === index) {
+                <section class="interactive-tabs__content" role="tabpanel" tabindex="0" [id]="panelId(index)" [attr.aria-labelledby]="tabId(index)">
+                  @for (child of tab.blocks; track child.id + '-' + $index) {
+                    <ng-container *ngComponentOutlet="childComponent(child); inputs: { block: child }" />
+                  }
+                </section>
+              }
+            }
+          </div>
+        </div>
+      } @else if (!isMobile()) {
+        <mat-tab-group
+          class="interactive-tabs__material-tabs"
+          [selectedIndex]="activeTab() < 0 ? 0 : activeTab()"
+          (selectedIndexChange)="selectTab($event)"
+          [headerPosition]="'above'"
+        >
+          @for (tab of data().tabs ?? []; track tab.id; let index = $index) {
+            <mat-tab>
+              <ng-template mat-tab-label>
+                @if (tab.icon) { <mat-icon aria-hidden="true">{{ tab.icon }}</mat-icon> }
+                <span>{{ tab.label }}</span>
+              </ng-template>
+              <section class="interactive-tabs__content">
+                @for (child of tab.blocks; track child.id + '-' + $index) {
+                  <ng-container *ngComponentOutlet="childComponent(child); inputs: { block: child }" />
+                }
+              </section>
+            </mat-tab>
+          }
+        </mat-tab-group>
+      } @else {
+        <mat-accordion class="interactive-tabs__mobile-accordion" [multi]="false">
+          @for (tab of data().tabs ?? []; track tab.id; let index = $index) {
+            <mat-expansion-panel
+              [expanded]="activeTab() === index"
+              (opened)="openAccordion(index)"
+              (closed)="closeAccordion(index)"
+            >
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  @if (tab.icon) { <mat-icon aria-hidden="true">{{ tab.icon }}</mat-icon> }
+                  <span>{{ tab.label }}</span>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <section class="interactive-tabs__content" [attr.aria-label]="tab.label">
+                @for (child of tab.blocks; track child.id + '-' + $index) {
+                  <ng-container *ngComponentOutlet="childComponent(child); inputs: { block: child }" />
+                }
+              </section>
+            </mat-expansion-panel>
+          }
+        </mat-accordion>
+      }
+    </section>
+  }
+  @case ('gallery') {
+    <section class="interactive-gallery" [ngClass]="classes()" [ngStyle]="styles()" [style.--gallery-columns]="data().columns ?? 3" aria-label="Gallery">
+      @for (image of data().images ?? []; track image.id) {
+        <figure class="interactive-gallery__item">
+          <img [src]="image.src" [alt]="image.alt" loading="lazy" />
+          @if (image.caption) { <figcaption>{{ image.caption }}</figcaption> }
+        </figure>
+      }
+    </section>
+  }
+  @case ('tooltip') {
+    <span class="interactive-tooltip" [matTooltip]="data().content ?? ''" tabindex="0">{{ data().label }}</span>
+  }
+}
+
+

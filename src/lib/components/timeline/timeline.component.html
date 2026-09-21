@@ -1,0 +1,51 @@
+<section class="timeline" [ngStyle]="styles()" aria-labelledby="timeline-title">
+  <div class="timeline__header">
+    <div>
+      @if (data().eyebrow) {
+        <div class="timeline__eyebrow">{{ data().eyebrow }}</div>
+      }
+      @if (data().title) {
+        <h2 id="timeline-title" class="timeline__title">{{ data().title }}</h2>
+      }
+    </div>
+    @if (data().linkLabel && data().linkUrl) {
+      <a mat-button class="timeline__link" [ngClass]="linkClass()" [href]="data().linkUrl">{{ data().linkLabel }}</a>
+    }
+  </div>
+  <ol class="timeline__list" aria-label="Experience periods">
+    @for (period of data().periods; track period.id) {
+      <li class="timeline__item" [ngStyle]="periodStyles(period)">
+        <div class="timeline__marker" aria-hidden="true"></div>
+        @if (period.compact) {
+          <details class="timeline__details" [open]="isPeriodExpanded(period)" (toggle)="onDetailsToggle(period, $event)">
+            <summary>
+              <div>
+                <div class="timeline__period">{{ periodRange(period) }}@if (period.company) { <span class="timeline__company">· {{ period.company }}</span> }</div>
+                <h3 class="timeline__period-title">{{ period.title }}</h3>
+                @if (period.tags.length > 0) { <div class="timeline__compact-tags">@for (tag of period.tags; track tag) { <span>{{ tag }}</span>@if (!$last) { <span aria-hidden="true">·</span> } }</div> }
+              </div>
+              <span class="timeline__details-action">{{ isPeriodExpanded(period) ? 'Hide details' : 'View details' }}</span>
+            </summary>
+            <div class="timeline__details-body">
+              <p class="timeline__text">{{ period.text }}</p>
+              @if (period.metric) { <div class="timeline__metric">{{ period.metric }}</div> }
+            </div>
+          </details>
+        } @else {
+          <div class="timeline__period-card">
+            <div class="timeline__period">{{ periodRange(period) }}@if (period.company) { <span class="timeline__company">· {{ period.company }}</span> }</div>
+            <h3 class="timeline__period-title">{{ period.title }}</h3>
+            <p class="timeline__text">{{ period.text }}</p>
+            @if (period.tags.length > 0) { <div class="timeline__tags" aria-label="Tags">@for (tag of period.tags; track tag) { <span class="timeline__tag">{{ tag }}</span> }</div> }
+            @if (period.metric) { <div class="timeline__metric">{{ period.metric }}</div> }
+          </div>
+        }
+      </li>
+    }
+  </ol>
+  @if (compactPeriods().length > 0) {
+    <div class="timeline__controls"><button mat-stroked-button type="button" (click)="toggleCompactPeriods()">{{ compactExpanded() ? 'Collapse earlier experience' : 'Expand all earlier experience' }}</button></div>
+  }
+</section>
+
+

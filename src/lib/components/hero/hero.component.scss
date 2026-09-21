@@ -1,0 +1,154 @@
+.hero {
+  align-items: center;
+  background: #f8fafc;
+  color: #102033;
+  display: grid;
+  gap: clamp(24px, 5vw, 64px);
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 60vh;
+  overflow: hidden;
+  padding: clamp(32px, 8vw, 96px) clamp(20px, 6vw, 72px);
+  position: relative;
+}
+
+.hero--media-start {
+  @media (min-width: 800px) {
+    grid-template-columns:
+      minmax(260px, var(--hero-media-width, 45%))
+      minmax(0, 1fr);
+  }
+}
+
+.hero--media-end {
+  @media (min-width: 800px) {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(260px, var(--hero-media-width, 45%));
+
+    .hero__media {
+      order: 2;
+    }
+  }
+}
+
+.hero--media-background {
+  color: #ffffff;
+}
+
+.hero__background {
+  height: 100%;
+  inset: 0;
+  object-fit: cover;
+  position: absolute;
+  width: 100%;
+  z-index: 0;
+}
+
+.hero--media-background::after {
+  background: linear-gradient(90deg, rgba(8, 19, 36, 0.78), rgba(8, 19, 36, 0.28));
+  content: '';
+  inset: 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.hero__content,
+.hero__media {
+  position: relative;
+  z-index: 2;
+}
+
+.hero__content {
+  max-width: 760px;
+}
+
+.hero--align-center .hero__content {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.hero--align-end .hero__content {
+  margin-left: auto;
+  text-align: right;
+}
+
+.hero--width-narrow .hero__content {
+  max-width: 520px;
+}
+
+.hero--width-medium .hero__content {
+  max-width: 640px;
+}
+
+.hero--width-full .hero__content {
+  max-width: none;
+}
+
+.hero__eyebrow {
+  font-size: 0.78rem;
+  font-weight: 800;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+}
+
+.hero__title {
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  font-weight: 800;
+  line-height: 0.98;
+  margin: 0;
+}
+
+.hero__subtitle {
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  line-height: 1.55;
+  margin: 20px 0 0;
+  max-width: 64ch;
+  white-space: pre-line;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.hero--align-center .hero__actions {
+  justify-content: center;
+}
+
+.hero--align-end .hero__actions {
+  justify-content: flex-end;
+}
+
+.hero__action-secondary {
+  --mat-sys-primary: #334155;
+}
+
+.hero__action-tertiary {
+  --mat-sys-primary: #0f766e;
+}
+
+.hero__media {
+  align-self: stretch;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.hero__media img {
+  aspect-ratio: 1 / 1;
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.hero__media-overlay {
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+

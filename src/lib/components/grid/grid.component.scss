@@ -1,0 +1,16 @@
+:host { display: block; width: 100%; }
+.grid-viewport { display: block; position: relative; width: 100%; }
+.grid-wrapper { display: grid; width: 100%; }
+.grid-viewport [hidden] { display: none !important; }
+.grid-item { min-width: 0; }
+.grid-viewport--slider { overflow: hidden; }
+.grid-viewport--slider .grid-wrapper { display: flex; flex-wrap: nowrap; }
+.grid-viewport--slider .grid-item { flex: 0 0 auto; width: min(100%, var(--headless-slider-column-width, 280px)); }
+.grid-control { align-items: center; background: white; border: 1px solid currentColor; border-radius: 50%; cursor: pointer; display: flex; height: 2.5rem; justify-content: center; position: absolute; top: 50%; transform: translateY(-50%); width: 2.5rem; z-index: 2; }
+.grid-control--previous { left: .5rem; }
+.grid-control--next { right: .5rem; }
+.grid-pagination { bottom: .5rem; left: 0; position: absolute; right: 0; text-align: center; z-index: 2; }
+.grid-pagination .swiper-pagination-bullet { background: currentColor; border: 0; border-radius: 50%; cursor: pointer; display: inline-block; height: .6rem; margin: 0 .2rem; opacity: .45; width: .6rem; }
+.grid-pagination .swiper-pagination-bullet-active { opacity: 1; }
+
+

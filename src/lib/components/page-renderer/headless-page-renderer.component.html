@@ -1,0 +1,11 @@
+<main class="headless-page" [attr.data-locale]="schema().locale">
+  @if (shouldRenderPageTitle()) {
+    <h1 class="headless-page__title">{{ schema().page.title }}</h1>
+  }
+
+  @for (block of resolvedBlocks(); track (block.id + '-' + $index)) {
+    <div class="headless-page__block" [ngClass]="alignmentClasses(block)">
+      <headless-block-outlet [block]="block" />
+    </div>
+  }
+</main>

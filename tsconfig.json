@@ -1,0 +1,25 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@jmgduarte/headless-core": ["../module-core/dist/index.d.ts"],
+      "@angular/core": ["node_modules/@angular/core"],
+      "@angular/core/rxjs-interop": ["node_modules/@angular/core/types/rxjs-interop.d.ts"],
+      "@angular/common": ["node_modules/@angular/common"],
+      "@angular/common/*": ["node_modules/@angular/common/*"],
+      "@angular/forms": ["node_modules/@angular/forms"],
+      "@angular/router": ["node_modules/@angular/router"],
+      "@angular/cdk/layout": ["node_modules/@angular/cdk/types/layout.d.ts"],
+      "@angular/material/*": ["node_modules/@angular/material/types/*.d.ts"],
+      "rxjs": ["node_modules/rxjs"],
+      "rxjs/*": ["node_modules/rxjs/*"],
+      "swiper": ["node_modules/swiper"],
+      "swiper/modules": ["node_modules/swiper/types/modules/index.d.ts"],
+      "swiper/*": ["node_modules/swiper/*"]
+    }
+  },
+  "include": ["src/**/*.ts"]
+}

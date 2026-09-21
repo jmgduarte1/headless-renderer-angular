@@ -1,0 +1,41 @@
+{
+  "name": "@jmgduarte/headless-angular",
+  "version": "0.0.3",
+  "private": true,
+  "type": "module",
+  "main": "dist/renderer/fesm2022/jmgduarte-headless-angular.mjs",
+  "module": "dist/renderer/fesm2022/jmgduarte-headless-angular.mjs",
+  "typings": "dist/renderer/types/jmgduarte-headless-angular.d.ts",
+  "dependencies": {
+    "@jmgduarte/headless-core": "file:../module-core",
+    "@angular/cdk": "^21.2.0",
+    "@angular/material": "^21.2.0",
+    "rxjs": "^7.8.2",
+    "swiper": "^12.2.0",
+    "tslib": "^2.3.0"
+  },
+  "peerDependencies": {
+    "@angular/common": "^21.2.0",
+    "@angular/core": "^21.2.0",
+    "@angular/forms": "^21.2.0",
+    "@angular/material": "^21.2.0",
+    "@angular/platform-browser": "^21.2.0",
+    "@angular/router": "^21.2.0"
+  },
+  "scripts": {
+    "build": "ng build headless-angular",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "ng test headless-angular --watch=false"
+  },
+  "devDependencies": {
+    "@angular/build": "^21.2.19",
+    "@angular/cli": "^21.2.19",
+    "@angular/compiler": "^21.2.0",
+    "@angular/compiler-cli": "^21.2.0",
+    "ng-packagr": "^21.2.0",
+    "typescript": "~5.9.2",
+    "vitest": "^4.0.8",
+    "jsdom": "^26.1.0"
+  },
+  "sideEffects": false
+}

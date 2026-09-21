@@ -1,0 +1,88 @@
+<nav class="navigation" [attr.aria-label]="ariaLabel()">
+  <button
+    class="navigation__toggle"
+    type="button"
+    [attr.aria-expanded]="mobileMenuOpen()"
+    aria-controls="navigation-mobile-menu"
+    (click)="toggleMobileMenu()"
+  >
+    <mat-icon aria-hidden="true">menu</mat-icon>
+  </button>
+
+  <ul class="navigation__list navigation__list--desktop">
+    <ng-container *ngTemplateOutlet="itemsTemplate; context: { items: items() }" />
+  </ul>
+
+  <div id="navigation-mobile-menu" class="navigation__mobile-panel" [class.navigation__mobile-panel--open]="mobileMenuOpen()">
+    <ul class="navigation__list navigation__list--mobile">
+      <ng-container *ngTemplateOutlet="mobileItemsTemplate; context: { items: items() }" />
+    </ul>
+  </div>
+</nav>
+
+<ng-template #itemsTemplate let-items="items">
+  @for (item of items; track item.id) {
+    <li class="navigation__item">
+      @if (item.children?.length) {
+        <button mat-button class="navigation__link" type="button" [matMenuTriggerFor]="childMenu">
+          {{ item.label }} <mat-icon aria-hidden="true">expand_more</mat-icon>
+        </button>
+        <mat-menu #childMenu="matMenu">
+          @for (child of item.children; track child.id) {
+            <a mat-menu-item [href]="href(child.link)" [attr.target]="child.link.type === 'external' ? child.link.target ?? null : null" [attr.rel]="child.link.type === 'external' ? child.link.rel?.join(' ') ?? null : null" (click)="select($event, child.link)">
+              {{ child.label }}
+            </a>
+          }
+        </mat-menu>
+      } @else {
+        <a
+          mat-button
+          class="navigation__link"
+          [href]="href(item.link)"
+          [attr.target]="item.link.type === 'external' ? item.link.target ?? null : null"
+          [attr.rel]="item.link.type === 'external' ? item.link.rel?.join(' ') ?? null : null"
+          (click)="select($event, item.link)"
+        >
+          {{ item.label }}
+        </a>
+      }
+    </li>
+  }
+</ng-template>
+
+<ng-template #mobileItemsTemplate let-items="items">
+  @for (item of items; track item.id) {
+    <li class="navigation__item">
+      <div class="navigation__mobile-row">
+        <a
+          class="navigation__link"
+          [href]="href(item.link)"
+          [attr.target]="item.link.type === 'external' ? item.link.target ?? null : null"
+          [attr.rel]="item.link.type === 'external' ? item.link.rel?.join(' ') ?? null : null"
+          (click)="select($event, item.link)"
+        >
+          {{ item.label }}
+        </a>
+        @if (item.children?.length) {
+          <button
+            class="navigation__submenu-toggle"
+            type="button"
+            [attr.aria-expanded]="isMobileItemExpanded(item.id)"
+            [attr.aria-controls]="'navigation-submenu-' + item.id"
+            (click)="toggleMobileItem(item.id)"
+          >
+            <mat-icon aria-hidden="true">expand_more</mat-icon>
+            <span class="visually-hidden">Toggle {{ item.label }} submenu</span>
+          </button>
+        }
+      </div>
+      @if (item.children?.length && isMobileItemExpanded(item.id)) {
+        <ul class="navigation__children" [id]="'navigation-submenu-' + item.id">
+          <ng-container *ngTemplateOutlet="mobileItemsTemplate; context: { items: item.children }" />
+        </ul>
+      }
+    </li>
+  }
+</ng-template>
+
+

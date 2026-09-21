@@ -1,0 +1,36 @@
+@if (data().filtersEnabled && categories().length > 0) {
+  <div class="featured-cards__filters" role="group" aria-label="Filter cards by category">
+    <button type="button" [attr.aria-pressed]="activeCategory() === null" (click)="selectedCategory.set(null)">All</button>
+    @for (category of categories(); track category) {
+      <button type="button" [attr.aria-pressed]="activeCategory() === category" (click)="selectedCategory.set(category)">{{ category }}</button>
+    }
+  </div>
+  <span class="featured-cards__status" role="status">{{ visibleCards().length }} results</span>
+}
+<section class="featured-cards" [ngClass]="responsiveClass()" [ngStyle]="styles()">
+  @for (card of visibleCards(); track card.id) {
+    <mat-card class="featured-card" [ngStyle]="cardStyles(card)">
+      <div class="featured-card__media">
+        @if (card.image) {
+          <img [src]="card.image.src" [alt]="card.image.alt ?? ''" />
+        } @else if (card.icon) {
+          <mat-icon aria-hidden="true">{{ card.icon }}</mat-icon>
+        }
+      </div>
+      <div class="featured-card__content">
+        @if (card.eyebrow) { <div class="featured-card__eyebrow">{{ card.eyebrow }}</div> }
+        <mat-card-title>{{ card.title }}</mat-card-title>
+        @if (card.tags.length > 0) {
+          <div class="featured-card__tags" aria-label="Tags">
+            @for (tag of card.tags; track tag) {
+              <span class="featured-card__tag">{{ tag }}</span>
+            }
+          </div>
+        }
+        <mat-card-content>{{ card.text }}</mat-card-content>
+      </div>
+    </mat-card>
+  }
+</section>
+
+
