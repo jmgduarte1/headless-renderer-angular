@@ -1,12 +1,21 @@
 {
   "name": "@jmgduarte/headless-angular",
   "version": "0.0.3",
-  "private": true,
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "main": "dist/renderer/fesm2022/jmgduarte-headless-angular.mjs",
   "module": "dist/renderer/fesm2022/jmgduarte-headless-angular.mjs",
   "typings": "dist/renderer/types/jmgduarte-headless-angular.d.ts",
   "files": ["dist/renderer"],
+  "description": "Free standalone Angular renderer for rendering Headless Core page, block, and navigation schemas.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jmgduarte1/headless-renderer-angular.git"
+  },
+  "license": "MIT",
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -15,7 +24,7 @@
     }
   },
   "dependencies": {
-    "@jmgduarte/headless-core": "git+ssh://git@github.com/jmgduarte1/headless-renderer-core.git#dist",
+    "@jmgduarte/headless-core": "^0.0.1",
     "@angular/cdk": "^21.2.0",
     "@angular/material": "^21.2.0",
     "rxjs": "^7.8.2",
