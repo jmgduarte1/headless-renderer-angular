@@ -100,7 +100,7 @@
     <section class="interactive-gallery" [ngClass]="classes()" [ngStyle]="styles()" [style.--gallery-columns]="data().columns ?? 3" aria-label="Gallery">
       @for (image of data().images ?? []; track image.id) {
         <figure class="interactive-gallery__item">
-          <img [src]="image.src" [alt]="image.alt" loading="lazy" />
+          <img [src]="image.src" [attr.srcset]="image.srcSet ?? null" [attr.sizes]="image.sizes ?? null" [alt]="image.alt" loading="lazy" decoding="async" />
           @if (image.caption) { <figcaption>{{ image.caption }}</figcaption> }
         </figure>
       }
@@ -110,5 +110,4 @@
     <span class="interactive-tooltip" [matTooltip]="data().content ?? ''" tabindex="0">{{ data().label }}</span>
   }
 }
-
 

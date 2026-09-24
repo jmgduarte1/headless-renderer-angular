@@ -6,27 +6,35 @@ import { BlockStyle, M1StyleValue } from '@jmgduarte/headless-core';
 @Injectable({ providedIn: 'root' })
 export class SafeStyleService {
   private readonly document = inject(DOCUMENT);
-  private readonly responsiveStyles = new Map<string, HTMLStyleElement>();
+  private readonly responsiveStyles = new Map<string, string>();
+  private styleElement?: HTMLStyleElement;
 
   registerResponsiveStyles(key: string, css: string): void {
-    const existing = this.responsiveStyles.get(key);
-
     if (css === '') {
-      existing?.remove();
       this.responsiveStyles.delete(key);
+      this.flush();
       return;
     }
 
-    if (existing) {
-      existing.textContent = css;
+    this.responsiveStyles.set(key, css);
+    this.flush();
+  }
+
+  private flush(): void {
+    if (this.responsiveStyles.size === 0) {
+      this.styleElement?.remove();
+      this.styleElement = undefined;
       return;
     }
 
-    const style = this.document.createElement('style');
-    style.setAttribute('data-headless-responsive', key);
-    style.textContent = css;
-    this.document.head.appendChild(style);
-    this.responsiveStyles.set(key, style);
+    if (!this.styleElement) {
+      this.styleElement = this.document.head.querySelector<HTMLStyleElement>('style[data-headless-responsive]')
+        ?? this.document.createElement('style');
+      this.styleElement.setAttribute('data-headless-responsive', 'true');
+      if (!this.styleElement.parentNode) this.document.head.appendChild(this.styleElement);
+    }
+
+    this.styleElement.textContent = [...this.responsiveStyles.values()].join('');
   }
 
   registerCustomStyles(key: string, css: string | undefined, scope: string): void {
@@ -231,5 +239,4 @@ export class SafeStyleService {
     });
   }
 }
-
 

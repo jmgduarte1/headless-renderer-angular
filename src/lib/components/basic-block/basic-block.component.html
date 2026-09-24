@@ -92,10 +92,13 @@
       [attr.id]="data().attributes?.['id'] ?? null"
       [src]="data().src"
       [attr.srcset]="data().srcSet ?? null"
-      [attr.loading]="data().loading ?? 'lazy'"
+      [attr.sizes]="data().sizes ?? null"
+      [attr.loading]="imageLoading()"
+      [attr.fetchpriority]="imageFetchPriority()"
+      decoding="async"
       [attr.alt]="data().alt ?? ''"
-      [attr.width]="data().attributes?.['width'] ?? null"
-      [attr.height]="data().attributes?.['height'] ?? null"
+      [attr.width]="data().width ?? data().attributes?.['width'] ?? null"
+      [attr.height]="data().height ?? data().attributes?.['height'] ?? null"
     />
   }
 
@@ -136,5 +139,4 @@
     <hr [ngClass]="classes()" [ngStyle]="styles()" [attr.id]="data().attributes?.['id'] ?? null" />
   }
 }
-
 

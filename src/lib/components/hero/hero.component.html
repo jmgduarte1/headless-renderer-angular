@@ -3,9 +3,13 @@
     <img
       class="hero__background"
       [src]="data().media?.image?.src"
+      [attr.srcset]="data().media?.image?.srcSet ?? null"
+      [attr.sizes]="data().media?.image?.sizes ?? null"
       [attr.alt]="imageAlt()"
       [attr.width]="data().media?.image?.width ?? null"
       [attr.height]="data().media?.image?.height ?? null"
+      loading="eager"
+      fetchpriority="high"
     />
   }
 
@@ -13,9 +17,13 @@
     <figure class="hero__media" [ngStyle]="mediaStyles()">
       <img
         [src]="data().media?.image?.src"
+        [attr.srcset]="data().media?.image?.srcSet ?? null"
+        [attr.sizes]="data().media?.image?.sizes ?? null"
         [attr.alt]="imageAlt()"
         [attr.width]="data().media?.image?.width ?? null"
         [attr.height]="data().media?.image?.height ?? null"
+        loading="eager"
+        fetchpriority="high"
       />
       <span class="hero__media-overlay" [ngStyle]="overlayStyles()" aria-hidden="true"></span>
     </figure>
@@ -85,13 +93,16 @@
     <figure class="hero__media" [ngStyle]="mediaStyles()">
       <img
         [src]="data().media?.image?.src"
+        [attr.srcset]="data().media?.image?.srcSet ?? null"
+        [attr.sizes]="data().media?.image?.sizes ?? null"
         [attr.alt]="imageAlt()"
         [attr.width]="data().media?.image?.width ?? null"
         [attr.height]="data().media?.image?.height ?? null"
+        loading="eager"
+        fetchpriority="high"
       />
       <span class="hero__media-overlay" [ngStyle]="overlayStyles()" aria-hidden="true"></span>
     </figure>
   }
 </section>
-
 

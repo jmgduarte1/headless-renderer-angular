@@ -2,6 +2,7 @@ import { NgClass, NgComponentOutlet, NgStyle } from '@angular/common';
 import { Component, computed, effect, inject, Injector, input } from '@angular/core';
 import { BasicBlock, PageBlock } from '@jmgduarte/headless-core';
 import { SafeStyleService } from '../../core/rendering/safe-style.service';
+import { HeadlessResourceHintService } from '../../core/rendering/headless-resource-hint.service';
 import { BlockComponentRegistry } from '../../core/registry/block-component-registry';
 import { GridComponent } from '../grid/grid.component';
 
@@ -14,6 +15,7 @@ import { GridComponent } from '../grid/grid.component';
 export class BasicBlockComponent {
   readonly block = input.required<BasicBlock>();
   private readonly styleService = inject(SafeStyleService);
+  private readonly resourceHints = inject(HeadlessResourceHintService);
   private readonly registry = inject(BlockComponentRegistry);
   private readonly injector = inject(Injector);
 
@@ -22,9 +24,19 @@ export class BasicBlockComponent {
       this.styleService.registerResponsiveStyles(this.responsiveClass(), this.responsiveStyles());
       this.styleService.registerCustomStyles(this.responsiveClass(), this.data().customCss, this.responsiveClass());
     }, { injector: this.injector });
+
+    effect(() => {
+      if (this.imageFetchPriority() === 'high') {
+        const data = this.data();
+        this.resourceHints.preloadImage(this.block().id, data.src, data.srcSet, data.sizes);
+      }
+    }, { injector: this.injector });
   }
 
   readonly data = computed(() => this.block().data);
+  readonly isPriorityImage = computed(() => this.data().fetchPriority === true);
+  readonly imageLoading = computed(() => this.isPriorityImage() ? 'eager' : 'lazy');
+  readonly imageFetchPriority = computed(() => this.isPriorityImage() ? 'high' : 'auto');
   childComponent(child: PageBlock) {
     return this.registry.resolve(child);
   }
@@ -179,4 +191,3 @@ export class BasicBlockComponent {
     return this.coverBackgroundChild() === undefined ? children : children.slice(1);
   }
 }
-

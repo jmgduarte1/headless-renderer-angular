@@ -12,7 +12,7 @@
     <mat-card class="featured-card" [ngStyle]="cardStyles(card)">
       <div class="featured-card__media">
         @if (card.image) {
-          <img [src]="card.image.src" [alt]="card.image.alt ?? ''" />
+          <img [src]="card.image.src" [attr.srcset]="card.image.srcSet ?? null" [attr.sizes]="card.image.sizes ?? null" [alt]="card.image.alt ?? ''" loading="lazy" decoding="async" />
         } @else if (card.icon) {
           <mat-icon aria-hidden="true">{{ card.icon }}</mat-icon>
         }
@@ -32,5 +32,4 @@
     </mat-card>
   }
 </section>
-
 

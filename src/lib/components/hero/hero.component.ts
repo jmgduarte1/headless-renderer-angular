@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { HeroBlock, HeroAction } from '@jmgduarte/headless-core';
 import { SafeStyleService } from '../../core/rendering/safe-style.service';
+import { HeadlessResourceHintService } from '../../core/rendering/headless-resource-hint.service';
 
 @Component({
   selector: 'headless-hero',
@@ -14,11 +15,19 @@ import { SafeStyleService } from '../../core/rendering/safe-style.service';
 export class HeroComponent {
   readonly block = input.required<HeroBlock>();
   private readonly styleService = inject(SafeStyleService);
+  private readonly resourceHints = inject(HeadlessResourceHintService);
   private readonly injector = inject(Injector);
 
   constructor() {
     effect(() => {
       this.styleService.registerResponsiveStyles(this.responsiveClass(), this.responsiveStyles());
+    }, { injector: this.injector });
+
+    effect(() => {
+      const image = this.data().media?.image;
+      if (image) {
+        this.resourceHints.preloadImage(this.block().id, image.src, image.srcSet, image.sizes);
+      }
     }, { injector: this.injector });
   }
 
@@ -113,4 +122,3 @@ export class HeroComponent {
     return rel.size > 0 ? [...rel].join(' ') : null;
   }
 }
-
