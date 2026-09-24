@@ -8,10 +8,14 @@ import { FormGroup, FormControl } from '@angular/forms';
 declare class BasicBlockComponent {
     readonly block: _angular_core.InputSignal<BasicBlock>;
     private readonly styleService;
+    private readonly resourceHints;
     private readonly registry;
     private readonly injector;
     constructor();
     readonly data: _angular_core.Signal<_jmgduarte_headless_core.BasicBlockData>;
+    readonly isPriorityImage: _angular_core.Signal<boolean>;
+    readonly imageLoading: _angular_core.Signal<"eager" | "lazy">;
+    readonly imageFetchPriority: _angular_core.Signal<"high" | "auto">;
     childComponent(child: PageBlock): _jmgduarte_headless_angular.BlockComponent;
     readonly responsiveClass: _angular_core.Signal<string>;
     readonly classes: _angular_core.Signal<{
@@ -32,6 +36,7 @@ declare class BasicBlockComponent {
 declare class HeroComponent {
     readonly block: _angular_core.InputSignal<HeroBlock>;
     private readonly styleService;
+    private readonly resourceHints;
     private readonly injector;
     constructor();
     readonly data: _angular_core.Signal<_jmgduarte_headless_core.HeroBlockData>;
@@ -221,7 +226,9 @@ declare function provideHeadlessAngular(config?: HeadlessAngularConfig, ...featu
 declare class SafeStyleService {
     private readonly document;
     private readonly responsiveStyles;
+    private styleElement?;
     registerResponsiveStyles(key: string, css: string): void;
+    private flush;
     registerCustomStyles(key: string, css: string | undefined, scope: string): void;
     toInlineStyles(style: BlockStyle | undefined, allowedProperties?: readonly string[]): Record<string, string | number>;
     value(style: BlockStyle | undefined, property: string): string | number | undefined;
